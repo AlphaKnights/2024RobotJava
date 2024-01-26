@@ -58,7 +58,7 @@ public class RobotContainer {
 		Command intakeOn = Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem)
 		Command intakeOff = Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem)
 
-		m_driverController.rightBumper().onTrue(fullDelivery).onTrue(intakeOn).onFalse(stopDelivery);
+		m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
 		m_driverController.leftBumper().onTrue(halfDelivery).onFalse(stopDelivery);
 	}
 

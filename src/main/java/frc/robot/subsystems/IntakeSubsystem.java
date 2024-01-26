@@ -8,18 +8,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import Constants.MotorConstants;
+import frc.robot.Constants.PortConstants;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-
-	CANSparkMax sparkMax = new CANSparkMax(kSparkMaxIntakePort, MotorType.brushless);
+	DigitalInput limitSwitch = new DigitalInput(PortConstants.kIntakeLimitSwitchPort);
+	CANSparkMax sparkMax = new CANSparkMax(PortConstants.kSparkMaxIntakePort, MotorType.brushless);
 	/** Creates a new DeliverySubsystem. */
 	public IntakeSubsystem() {}
 
-	// DONT USE UNLESS VERY SPECIFIC PURPOSE
 	@Override
-	public void periodic() {
-		// This method will be called once per scheduler run
+	public void periodic() { // Runs every 20ms
+		switch (limitSwitch.get()) {
+			case true:
+				intakeOff()
+			case false:
+				intakeOn()
+		}
 	}
 
 	@Override
@@ -28,10 +33,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void intakeOn(){
-		sparkMax.set(MotorConstants.kIntakeOnSpeed);
+		sparkMax.set(IntakeConstants.kIntakeOnSpeed);
 	}
 
 	public void intakeOff(){
-		sparkMax.set(MotorConstants.kIntakeOffSpeed)
+		sparkMax.set(IntakeConstants.kIntakeOffSpeed)
 	}
 }

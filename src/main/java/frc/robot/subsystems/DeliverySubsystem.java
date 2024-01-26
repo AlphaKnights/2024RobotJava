@@ -8,18 +8,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import Constants.MotorConstants;
+import frc.robot.Constants.DeliveryConstants;
+import frc.robot.Constants.PortConstants;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class DeliverySubsystem extends SubsystemBase {
-
-	CANSparkMax sparkMax = new CANSparkMax(MotorConstants.kSparkMaxDeliveryPort, MotorType.brushless);
+	TalonSRX talon22 = new TalonSRX(22);
+	TalonSRX talon23 = new TalonSRX(23);
+	CANSparkMax sparkMax = new CANSparkMax(PortConstants.kSparkMaxDeliveryPort, MotorType.brushless);
 	/** Creates a new DeliverySubsystem. */
 	public DeliverySubsystem() {}
 
-	// DONT USE UNLESS VERY SPECIFIC PURPOSE
 	@Override
 	public void periodic() {
-		// This method will be called once per scheduler run
+		talon22.set(1)
+		talon23.set(-1)
 	}
 
 	@Override
@@ -28,14 +31,14 @@ public class DeliverySubsystem extends SubsystemBase {
 	}
 
 	public void fullDelivery(){
-		sparkMax.set(MotorConstants.kDeliveryFullSpeed);
+		sparkMax.set(DeliveryConstants.kDeliveryFullSpeed);
 	}
 
 	public void halfDelivery(){
-		sparkMax.set(MotorConstants.kDeliveryHalfSpeed)
+		sparkMax.set(DeliveryConstants.kDeliveryHalfSpeed)
 	}
 
 	public void stopDelivery(){
-		sparkMax.set(MotorConstants.kDeliveryOffSpeed)
+		sparkMax.set(DeliveryConstants.kDeliveryOffSpeed)
 	}
 }
