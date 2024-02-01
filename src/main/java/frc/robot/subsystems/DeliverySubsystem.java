@@ -13,16 +13,13 @@ import frc.robot.Constants.PortConstants;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class DeliverySubsystem extends SubsystemBase {
-	TalonSRX talon22 = new TalonSRX(22);
-	TalonSRX talon23 = new TalonSRX(23);
 	CANSparkMax sparkMax = new CANSparkMax(PortConstants.kSparkMaxDeliveryPort, MotorType.brushless);
 	/** Creates a new DeliverySubsystem. */
 	public DeliverySubsystem() {}
 
 	@Override
 	public void periodic() {
-		talon22.set(1)
-		talon23.set(-1)
+
 	}
 
 	@Override

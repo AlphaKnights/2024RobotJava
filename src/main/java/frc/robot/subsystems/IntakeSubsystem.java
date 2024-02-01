@@ -21,9 +21,11 @@ public class IntakeSubsystem extends SubsystemBase {
 	public void periodic() { // Runs every 20ms
 		switch (limitSwitch.get()) {
 			case true:
-				intakeOff()
+				intakeOff();
+				break;
 			case false:
-				intakeOn()
+				intakeOn();
+				break;
 		}
 	}
 
@@ -37,6 +39,6 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void intakeOff(){
-		sparkMax.set(IntakeConstants.kIntakeOffSpeed)
+		sparkMax.set(IntakeConstants.kIntakeOffSpeed);
 	}
 }
