@@ -166,13 +166,13 @@ public class DriveSubsystem extends SubsystemBase {
 
 		// Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
 		if (result.isPresent()) {
-		EstimatedRobotPose camPose = result.get();
-		m_poseEstimator.addVisionMeasurement(
-			camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-		m_field2d.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
-		if (i > 20) {
-			System.out.println(new CameraTargetRelation(new Pose3d(), camPose.estimatedPose).camToTargDistXY);
-		}
+			EstimatedRobotPose camPose = result.get();
+			m_poseEstimator.addVisionMeasurement(
+				camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+			m_field2d.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+			if (i > 20) {
+				System.out.println(new CameraTargetRelation(new Pose3d(), camPose.estimatedPose).camToTargDistXY);
+			}
 		}
 
 		m_field2d.getObject("Actual Pos").setPose(m_odometry.getPoseMeters());
@@ -203,18 +203,18 @@ public class DriveSubsystem extends SubsystemBase {
 			// acceleration
 			double directionSlewRate;
 			if (m_currentTranslationMag != 0.0) {
-			directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag);
+				directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag);
 			} else {
-			directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
+				directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
 			}
 
 			double currentTime = WPIUtilJNI.now() * 1e-6;
 			double elapsedTime = currentTime - m_prevTime;
 			double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
 			if (angleDif < 0.45 * Math.PI) {
-			m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
-				directionSlewRate * elapsedTime);
-			m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
+				m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
+					directionSlewRate * elapsedTime);
+				m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
 			} else if (angleDif > 0.85 * Math.PI) {
 			if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with equality
 													// checking
@@ -225,9 +225,9 @@ public class DriveSubsystem extends SubsystemBase {
 				m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
 			}
 			} else {
-			m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
-				directionSlewRate * elapsedTime);
-			m_currentTranslationMag = m_magLimiter.calculate(0.0);
+				m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
+					directionSlewRate * elapsedTime);
+				m_currentTranslationMag = m_magLimiter.calculate(0.0);
 			}
 			m_prevTime = currentTime;
 
