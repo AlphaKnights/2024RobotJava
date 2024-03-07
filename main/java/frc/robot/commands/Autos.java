@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 public final class Autos {
   /** Example static factory for an autonomous command. */
   public static Command exampleAuto(PneumaticsSubsystem p_pneumaticsSubsystem) {
-    return Commands.sequence(p_pneumaticsSubsystem.enablePistonCommand(), new ExampleCommand(p_pneumaticsSubsystem));
+   // return Commands.sequence(ExampleCommand.m_disablePistonCommand, new ExampleCommand(p_pneumaticsSubsystem));
+    return null; // we aren't doing automonous right now
   }
 
   private Autos() {
