@@ -15,10 +15,10 @@ import frc.robot.Constants.PneumaticConstants;
 
 public class PneumaticsSubsystem extends SubsystemBase {
   PneumaticHub pneumaticHub = new PneumaticHub();
-  DoubleSolenoid m_doubleSolenoid1 = new DoubleSolenoid(null, PneumaticConstants.fwdChannel, PneumaticConstants.revChannel);
-  DoubleSolenoid m_doubleSolenoid2 = new DoubleSolenoid(null, PneumaticConstants.fwdChannel, PneumaticConstants.revChannel);
+  DoubleSolenoid m_doubleSolenoid1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, PneumaticConstants.fwdChannel, PneumaticConstants.revChannel);
+  DoubleSolenoid m_doubleSolenoid2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, PneumaticConstants.fwdChannel, PneumaticConstants.revChannel);
 
-  Compressor m_compressor = new Compressor(null);
+  Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);
   /** Creates a new ExampleSubsystem. */
   public PneumaticsSubsystem() {
 }
