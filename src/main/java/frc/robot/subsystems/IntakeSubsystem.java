@@ -38,8 +38,10 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void intakeOn(){
-		m_sparkMax.setInverted(true);
-		m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+		if( switchCounter != 2 ){
+			m_sparkMax.setInverted(true);
+			m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+		}
 	}
 
 	public void intakeOff(){

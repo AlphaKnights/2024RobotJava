@@ -82,10 +82,16 @@ public final class Constants {
 
 		//Intake, Delivery, and Climb Controller
 		public static final int kGenControllerPort = 1;
-		public static final int kFloorIntakeButton = 1;
-		public static final int kClimbExtendButton = 5;
-		public static final int kClimbRetractButton = 6;
-		public static final int kTowerIntakeButton = 2;
+		public static final int kFloorIntakeButton = 3;
+		public static final int kFloorIntakeOutButton = 4;
+		public static final int kClimbExtendButton = 11;
+		public static final int kClimbRetractButton = 12;
+		public static final int kClimbLockButton = 10;
+		public static final int kTowerIntakeSlowButton = 5;
+		public static final int kTowerIntakeButton = 6;
+		public static final int kTowerIntakeFireButton = 1; // Trigger Button
+		// public static final int kFlyWheelSpinUp = 2; // Thumb Button
+
 		
 
 		//Speed Limiters:

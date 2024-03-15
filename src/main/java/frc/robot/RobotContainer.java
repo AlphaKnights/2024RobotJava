@@ -62,6 +62,10 @@ public class RobotContainer {
 	private final JoystickButton m_retractButton = new JoystickButton(m_genController, OIConstants.kClimbRetractButton);
 	private final JoystickButton m_intakeOnButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeButton);
 	private final JoystickButton m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
+	private final JoystickButton m_intakeOutButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
+
+	private final JoystickButton m_slowShotButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeSlowButton);
+	private final JoystickButton m_fireShotButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeFireButton);
 
 	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -107,6 +111,7 @@ public class RobotContainer {
 		Command stopDelivery = Commands.runOnce(m_deliverySubsystem::stopDelivery, m_deliverySubsystem);
 
 		Command intakeOn = Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem);
+		Command intakeOut = Commands.runOnce(m_intakeSybsystem::intakeReverse, m_intakeSybsystem);
 		//Command intakeOff = Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem); this one ain't used anywhere, it gets turned off by the periodic of the subsystem
 
 		Command extendClimb = Commands.run(m_climbSubsystem::extend, m_climbSubsystem);
@@ -120,21 +125,31 @@ public class RobotContainer {
 		Command m_storedNoteLEDCheck = new StoredNoteLEDCheck(m_ledSubsystem, m_intakeSybsystem);
 
 		SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
-		
+
+		// Review might have issues
+		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(5), stopDelivery);
+
 		//controls
-		m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
-		m_driverController.leftBumper().onTrue(halfDelivery).onFalse(stopDelivery);
+		// m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
+		// m_driverController.leftBumper().onTrue(halfDelivery).onFalse(stopDelivery);
 
 		//m_driverController.rightTrigger().onTrue(blueLED).onFalse(redLED);
 		//m_driverController.leftTrigger().onTrue(greenLED).onFalse(redLED); id rather a new set of buttons or that you un these checks via periodic
 		//cus otherwise these might overwrite delivery
 //needs to be tested^
 
+		// Climb
 		m_extendButton.onTrue(extendClimb).onFalse(haltClimb);
 		m_retractButton.onTrue(retractClimb).onFalse(haltClimb);
 		
+		// Intake
 		m_towerIntakeButton.onTrue(towerIntake);
-		//m_intakeOnButton.onTrue(intakeOn);
+		m_intakeOnButton.onTrue(intakeOn);
+		m_intakeOnButton.onTrue(blueLED);
+		m_intakeOutButton.onTrue(intakeOut);
+
+		// Firing
+		m_fireShotButton.onTrue(fullFire);
 
 		m_ledSubsystem.setDefaultCommand(m_storedNoteLEDCheck);
 
