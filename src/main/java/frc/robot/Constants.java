@@ -156,13 +156,13 @@ public final class Constants {
 		public static final int kLeftTalonFXClimbId = 41;
 		public static final int kRightTalonFXClimbId = 42;
 
-		// public static final int kSparkMaxUIntakePort = 31;
-		// public static final int kSparkMaxLIntakePort = 32;
+		public static final int kSparkMaxUIntakePort = 31;
+		public static final int kSparkMaxLIntakePort = 32;
 
-		public static final int kIntakeLimitSwitchPort = 2;
+		// public static final int kIntakeLimitSwitchPort = 2;
 
-		public static final int kClimbUpperLimitSwitchPort = 0;
-		public static final int kClimbLowerLimitSwitchPort = 1;
+		// public static final int kClimbUpperLimitSwitchPort = 0;
+		// public static final int kClimbLowerLimitSwitchPort = 1;
 
 		public static final int PWMPort = 0;
 	}

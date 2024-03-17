@@ -11,6 +11,7 @@ import frc.robot.Constants.PortConstants;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.Joystick;
@@ -106,17 +107,17 @@ public class RobotContainer {
 		// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
 
-		Command fullDelivery = Commands.run(m_deliverySubsystem::fullDelivery, m_deliverySubsystem);
-		Command halfDelivery = Commands.run(m_deliverySubsystem::halfDelivery, m_deliverySubsystem);
-		Command stopDelivery = Commands.runOnce(m_deliverySubsystem::stopDelivery, m_deliverySubsystem);
+		InstantCommand fullDelivery = new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem);
+		InstantCommand halfDelivery = new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem);
+		InstantCommand stopDelivery = new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem);
 
-		Command intakeOn = Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem);
-		Command intakeOut = Commands.runOnce(m_intakeSybsystem::intakeReverse, m_intakeSybsystem);
-		//Command intakeOff = Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem); this one ain't used anywhere, it gets turned off by the periodic of the subsystem
+		InstantCommand intakeOn = new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
+		InstantCommand intakeOut = new InstantCommand(()-> m_intakeSybsystem.intakeReverse(), m_intakeSybsystem);
+		InstantCommand intakeOff = new InstantCommand(()-> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
 
-		Command extendClimb = Commands.run(m_climbSubsystem::extend, m_climbSubsystem);
-		Command retractClimb = Commands.run(m_climbSubsystem::retract, m_climbSubsystem);
-		Command haltClimb = Commands.runOnce(m_climbSubsystem::stop, m_climbSubsystem);
+		InstantCommand extendClimb = new InstantCommand(()-> m_climbSubsystem.extend(), m_climbSubsystem);
+		InstantCommand retractClimb = new InstantCommand(()-> m_climbSubsystem.retract(), m_climbSubsystem);
+		InstantCommand haltClimb = new InstantCommand(()-> m_climbSubsystem.stop(), m_climbSubsystem);
 
 		// Command blueLED = Commands.runOnce(m_ledSubsystem::blue, m_ledSubsystem);
 		// Command redLED = Commands.runOnce(m_ledSubsystem::red, m_ledSubsystem);
@@ -127,8 +128,18 @@ public class RobotContainer {
 		// SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
 
 		// Review might have issues
-		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem), stopDelivery, Commands.runOnce(m_intakeSybsystem::intakeOff, m_intakeSybsystem));
-		SequentialCommandGroup halfFire = new SequentialCommandGroup(halfDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem), stopDelivery, Commands.runOnce(m_intakeSybsystem::intakeOff, m_intakeSybsystem));
+		SequentialCommandGroup fullFire = new SequentialCommandGroup(
+			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
+			new WaitCommand(1.5),
+			new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem),
+			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
+		SequentialCommandGroup halfFire = new SequentialCommandGroup(
+			new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem), 
+			new WaitCommand(1.5), 
+			new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem), 
+			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
 
 		//controls
 		// m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
