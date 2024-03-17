@@ -51,6 +51,8 @@ public class RobotContainer {
 	private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
 	// private final LedSubsystem m_ledSubsystem = new LedSubsystem();
 
+	private IntakeCommands m_IntakeCommands;
+
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	//private final AutoLevel m_autoLevel = new AutoLevel(m_robotDrive);
@@ -71,6 +73,8 @@ public class RobotContainer {
 	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
+
+		m_IntakeCommands = new IntakeCommands(m_intakeSybsystem);
 		// Configure the trigger bindings
 		configureBindings();
 		m_robotDrive.setDefaultCommand(
@@ -156,8 +160,8 @@ public class RobotContainer {
 		
 		// Intake
 		// m_towerIntakeButton.onTrue(towerIntake);
-		m_intakeOnButton.onTrue(intakeOn);
-		// m_intakeOnButton.onTrue(blueLED);
+		m_intakeOnButton.onTrue(m_IntakeCommands.intakeOn());
+		// m_intakeOnButton.onTrue(blueLED); 
 		m_intakeOutButton.onTrue(intakeOut);
 
 		// Firing

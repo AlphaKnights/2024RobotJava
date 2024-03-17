@@ -35,6 +35,7 @@ public class DeliverySubsystem extends SubsystemBase {
 	}
 
 	public void fullDelivery(){
+		System.out.println("full delivery running");
 		LowerSparkMax.setInverted(false);
 		UpperSparkMax.setInverted(false);
 		LowerSparkMax.set(DeliveryConstants.kDeliveryFullSpeed);

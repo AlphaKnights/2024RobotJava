@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IntakeSubsystem extends SubsystemBase {
 	//  DigitalInput m_limitSwitch = new DigitalInput(PortConstants.kIntakeLimitSwitchPort);
-	//  CANSparkMax m_sparkMax = new CANSparkMax(PortConstants.kSparkMaxIntakePort, MotorType.kBrushless);
+	 CANSparkMax m_sparkMax = new CANSparkMax(PortConstants.kSparkMaxLIntakePort, MotorType.kBrushless);
+	 CANSparkMax m_sparkMaxU = new CANSparkMax(PortConstants.kSparkMaxUIntakePort, MotorType.kBrushless);
 	 public int switchCounter = 0;
 	 boolean lastTickInput = false;
 	/** Creates a new DeliverySubsystem. */
@@ -39,17 +40,23 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	public void intakeOn(){
 		if( switchCounter != 2 ){
-			// m_sparkMax.setInverted(true);
-			// m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+			m_sparkMax.setInverted(true);
+			m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+			m_sparkMaxU.setInverted(true);
+			m_sparkMaxU.set(IntakeConstants.kIntakeOnSpeed);
 		}
 	}
 
 	public void intakeOff(){
-		// m_sparkMax.set(IntakeConstants.kIntakeOffSpeed);
+		m_sparkMax.set(IntakeConstants.kIntakeOffSpeed);
+		m_sparkMaxU.set(IntakeConstants.kIntakeOffSpeed);
+
 	}
 
 	public void intakeReverse() {
-		// m_sparkMax.setInverted(true);
-		// m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+		m_sparkMax.setInverted(true);
+		m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+		m_sparkMaxU.setInverted(true);
+		m_sparkMaxU.set(IntakeConstants.kIntakeOnSpeed);
 	}
 }
