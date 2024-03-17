@@ -127,8 +127,8 @@ public class RobotContainer {
 		// SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
 
 		// Review might have issues
-		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeReverse, m_intakeSybsystem), stopDelivery);
-		SequentialCommandGroup halfFire = new SequentialCommandGroup(halfDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeReverse, m_intakeSybsystem), stopDelivery);
+		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem), stopDelivery, Commands.runOnce(m_intakeSybsystem::intakeOff, m_intakeSybsystem));
+		SequentialCommandGroup halfFire = new SequentialCommandGroup(halfDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeOn, m_intakeSybsystem), stopDelivery, Commands.runOnce(m_intakeSybsystem::intakeOff, m_intakeSybsystem));
 
 		//controls
 		// m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
