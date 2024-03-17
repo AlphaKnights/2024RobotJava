@@ -87,9 +87,9 @@ public final class Constants {
 		public static final int kClimbExtendButton = 11;
 		public static final int kClimbRetractButton = 12;
 		public static final int kClimbLockButton = 10;
-		public static final int kTowerIntakeSlowButton = 5;
+		public static final int kFireSlowButton = 5;
 		public static final int kTowerIntakeButton = 6;
-		public static final int kTowerIntakeFireButton = 1; // Trigger Button
+		public static final int kFireButton = 1; // Trigger Button
 		// public static final int kFlyWheelSpinUp = 2; // Thumb Button
 
 		
@@ -134,28 +134,30 @@ public final class Constants {
 		public static final double kBackRightChassisAngularOffset = Math.PI/2;
 
 		// SPARK MAX CAN IDs
-		public static final int kFrontLeftDrivingCanId = 5;
-		public static final int kRearLeftDrivingCanId = 8;
-		public static final int kFrontRightDrivingCanId = 7;
-		public static final int kRearRightDrivingCanId = 9;
+		// GROUPINGS - Drive = 00 Turn = 10 Delivery = 20 Intake = 30 Climb = 40
+		public static final int kFrontLeftDrivingCanId = 1;
+		public static final int kRearLeftDrivingCanId = 2;
+		public static final int kFrontRightDrivingCanId = 3;
+		public static final int kRearRightDrivingCanId = 4;	
 
-		public static final int kFrontLeftTurningCanId = 3;
+		public static final int kFrontLeftTurningCanId = 11;
 		public static final int kRearLeftTurningCanId = 12;
-		public static final int kFrontRightTurningCanId = 11;
-		public static final int kRearRightTurningCanId = 10;
+		public static final int kFrontRightTurningCanId = 13;
+		public static final int kRearRightTurningCanId = 14;
 
 		public static final boolean kGyroReversed = true;
 	}
 
 	public static final class PortConstants {
 		// CAN Ports 1-4 are avalible for use for subsystem motors
-		public static final int kSparkMaxLDeliveryPort = 1;
-		public static final int kSparkMaxUDeliveryPort = 6;
+		public static final int kSparkMaxLDeliveryPort = 21;
+		public static final int kSparkMaxUDeliveryPort = 22;
 
-		public static final int kLeftTalonFXClimbId = 7;
-		public static final int kRightTalonFXClimbId = 3;
+		public static final int kLeftTalonFXClimbId = 41;
+		public static final int kRightTalonFXClimbId = 42;
 
-		public static final int kSparkMaxIntakePort = 1;
+		// public static final int kSparkMaxUIntakePort = 31;
+		// public static final int kSparkMaxLIntakePort = 32;
 
 		public static final int kIntakeLimitSwitchPort = 2;
 
@@ -251,8 +253,8 @@ public final class Constants {
 	}
 
 	public static final class ClimbConstants {
-		public static final double kClimbExtendSpeed = 0.2;
-		public static final double kClimbRetractsSpeed = 0.2;
+		public static final double kClimbExtendSpeed = 0.5;
+		public static final double kClimbRetractsSpeed = 0.5;
 	}
 
 	public static final class PneumaticsConstants {

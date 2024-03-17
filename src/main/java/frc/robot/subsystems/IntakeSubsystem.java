@@ -13,8 +13,8 @@ import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IntakeSubsystem extends SubsystemBase {
-	 DigitalInput m_limitSwitch = new DigitalInput(PortConstants.kIntakeLimitSwitchPort);
-	 CANSparkMax m_sparkMax = new CANSparkMax(PortConstants.kSparkMaxIntakePort, MotorType.kBrushless);
+	//  DigitalInput m_limitSwitch = new DigitalInput(PortConstants.kIntakeLimitSwitchPort);
+	//  CANSparkMax m_sparkMax = new CANSparkMax(PortConstants.kSparkMaxIntakePort, MotorType.kBrushless);
 	 public int switchCounter = 0;
 	 boolean lastTickInput = false;
 	/** Creates a new DeliverySubsystem. */
@@ -22,14 +22,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() { // Runs every 20ms
-		if (m_limitSwitch.get() && !lastTickInput) {
-			 switchCounter += 1;
-		}
-		if (switchCounter == 2) {
-			switchCounter = 0;
-			intakeOff();
-		}
-		lastTickInput = m_limitSwitch.get();
+		// if (m_limitSwitch.get() && !lastTickInput) {
+			//  switchCounter += 1;
+		// }
+		// if (switchCounter == 2) {
+			// switchCounter = 0;
+			// intakeOff();
+		// }
+		// lastTickInput = m_limitSwitch.get();
 	}
 
 	@Override
@@ -39,17 +39,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	public void intakeOn(){
 		if( switchCounter != 2 ){
-			m_sparkMax.setInverted(true);
-			m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+			// m_sparkMax.setInverted(true);
+			// m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
 		}
 	}
 
 	public void intakeOff(){
-		m_sparkMax.set(IntakeConstants.kIntakeOffSpeed);
+		// m_sparkMax.set(IntakeConstants.kIntakeOffSpeed);
 	}
 
 	public void intakeReverse() {
-		m_sparkMax.setInverted(true);
-		m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
+		// m_sparkMax.setInverted(true);
+		// m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
 	}
 }

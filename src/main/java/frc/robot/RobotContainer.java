@@ -48,7 +48,7 @@ public class RobotContainer {
 	private final IntakeSubsystem m_intakeSybsystem = new IntakeSubsystem();
 	private final DeliverySubsystem m_deliverySubsystem = new DeliverySubsystem();
 	private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
-	private final LedSubsystem m_ledSubsystem = new LedSubsystem();
+	// private final LedSubsystem m_ledSubsystem = new LedSubsystem();
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
@@ -64,8 +64,8 @@ public class RobotContainer {
 	private final JoystickButton m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
 	private final JoystickButton m_intakeOutButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
 
-	private final JoystickButton m_slowShotButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeSlowButton);
-	private final JoystickButton m_fireShotButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeFireButton);
+	private final JoystickButton m_slowShotButton = new JoystickButton(m_genController, OIConstants.kFireSlowButton);
+	private final JoystickButton m_fireShotButton = new JoystickButton(m_genController, OIConstants.kFireButton);
 
 	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -118,16 +118,16 @@ public class RobotContainer {
 		Command retractClimb = Commands.run(m_climbSubsystem::retract, m_climbSubsystem);
 		Command haltClimb = Commands.runOnce(m_climbSubsystem::stop, m_climbSubsystem);
 
-		Command blueLED = Commands.runOnce(m_ledSubsystem::blue, m_ledSubsystem);
-		Command redLED = Commands.runOnce(m_ledSubsystem::red, m_ledSubsystem);
-		Command greenLED = Commands.runOnce(m_ledSubsystem::green, m_ledSubsystem);
+		// Command blueLED = Commands.runOnce(m_ledSubsystem::blue, m_ledSubsystem);
+		// Command redLED = Commands.runOnce(m_ledSubsystem::red, m_ledSubsystem);
+		// Command greenLED = Commands.runOnce(m_ledSubsystem::green, m_ledSubsystem);
 
-		Command m_storedNoteLEDCheck = new StoredNoteLEDCheck(m_ledSubsystem, m_intakeSybsystem);
+		// Command m_storedNoteLEDCheck = new StoredNoteLEDCheck(m_ledSubsystem, m_intakeSybsystem);
 
-		SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
+		// SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
 
 		// Review might have issues
-		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(5), stopDelivery);
+		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(1.5), stopDelivery);
 
 		//controls
 		// m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
@@ -143,15 +143,15 @@ public class RobotContainer {
 		m_retractButton.onTrue(retractClimb).onFalse(haltClimb);
 		
 		// Intake
-		m_towerIntakeButton.onTrue(towerIntake);
+		// m_towerIntakeButton.onTrue(towerIntake);
 		m_intakeOnButton.onTrue(intakeOn);
-		m_intakeOnButton.onTrue(blueLED);
+		// m_intakeOnButton.onTrue(blueLED);
 		m_intakeOutButton.onTrue(intakeOut);
 
 		// Firing
-		m_fireShotButton.onTrue(fullFire);
+		m_fireShotButton.onTrue(halfDelivery).onFalse(stopDelivery);
 
-		m_ledSubsystem.setDefaultCommand(m_storedNoteLEDCheck);
+		// m_ledSubsystems.setDefaultCommand(m_storedNoteLEDCheck);
 
 	}
 
