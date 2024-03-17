@@ -127,7 +127,8 @@ public class RobotContainer {
 		// SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
 
 		// Review might have issues
-		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(1.5), stopDelivery);
+		SequentialCommandGroup fullFire = new SequentialCommandGroup(fullDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeReverse, m_intakeSybsystem), stopDelivery);
+		SequentialCommandGroup halfFire = new SequentialCommandGroup(halfDelivery, new WaitCommand(1.5), Commands.runOnce(m_intakeSybsystem::intakeReverse, m_intakeSybsystem), stopDelivery);
 
 		//controls
 		// m_driverController.rightBumper().onTrue(fullDelivery).onFalse(stopDelivery);
@@ -149,7 +150,9 @@ public class RobotContainer {
 		m_intakeOutButton.onTrue(intakeOut);
 
 		// Firing
-		m_fireShotButton.onTrue(halfDelivery).onFalse(stopDelivery);
+		m_slowShotButton.onTrue(halfFire);
+		m_fireShotButton.onTrue(fullFire);
+		
 
 		// m_ledSubsystems.setDefaultCommand(m_storedNoteLEDCheck);
 
