@@ -4,16 +4,21 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import javax.sound.sampled.Port;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.PortConstants;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.Constants.IntakeConstants;
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
 public class IntakeSubsystem extends SubsystemBase {
-	//  DigitalInput m_limitSwitch = new DigitalInput(PortConstants.kIntakeLimitSwitchPort);
+	 Ultrasonic m_ultrasonic = new Ultrasonic(PortConstants.kIntakeUltrasonicPort, PortConstants.kIntakeUltrasonicPort);
 	 CANSparkMax m_sparkMax = new CANSparkMax(PortConstants.kSparkMaxLIntakePort, MotorType.kBrushless);
 	 CANSparkMax m_sparkMaxU = new CANSparkMax(PortConstants.kSparkMaxUIntakePort, MotorType.kBrushless);
 	 public int switchCounter = 0;
@@ -23,16 +28,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() { // Runs every 20ms
-		// if (m_limitSwitch.get() && !lastTickInput) {
-			//  switchCounter += 1;
-		// }
-		// if (switchCounter == 2) {
-			// switchCounter = 0;
-			// intakeOff();
-		// }
-		// lastTickInput = m_limitSwitch.get();
+		//if (m_ultrasonic.getRangeInches() <= IntakeConstants.kUltrasonicDetectDist) {
+	 		//  switchCounter += 1;
+	 	//} else {
+	 	//	intakeOff();
+	 	//}
+	 	// lastTickInput = m_ultrasonic.getValue() <= 1;
+				//don't think you can do that^
 	}
-
 	@Override
 	public void simulationPeriodic() {
 		// This method will be called once per scheduler run during simulation
@@ -54,9 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void intakeReverse() {
-		m_sparkMax.setInverted(true);
-		m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
-		m_sparkMaxU.setInverted(true);
-		m_sparkMaxU.set(IntakeConstants.kIntakeOnSpeed);
+		m_sparkMax.set(-0.2);
+		m_sparkMaxU.set(-0.2);
 	}
 }

@@ -36,20 +36,15 @@ public class DeliverySubsystem extends SubsystemBase {
 
 	public void fullDelivery(){
 		System.out.println("full delivery running");
-		LowerSparkMax.setInverted(false);
-		UpperSparkMax.setInverted(false);
-		LowerSparkMax.set(DeliveryConstants.kDeliveryFullSpeed);
-		UpperSparkMax.set(DeliveryConstants.kDeliveryFullSpeed);
+		LowerSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed);
+		UpperSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed);
 
 	}
 
 	public void halfDelivery(){
 		// Solenoid.set(DoubleSolenoid.Value.kForward);
-
-		LowerSparkMax.setInverted(false);
-		UpperSparkMax.setInverted(false);
-		LowerSparkMax.set(DeliveryConstants.kDeliveryHalfSpeed);
-		UpperSparkMax.set(DeliveryConstants.kDeliveryHalfSpeed);
+		LowerSparkMax.set(-DeliveryConstants.kDeliveryHalfSpeed);
+		UpperSparkMax.set(-DeliveryConstants.kDeliveryHalfSpeed);
 
 	}
 
@@ -60,10 +55,8 @@ public class DeliverySubsystem extends SubsystemBase {
 	}
 
 	public void towerIntake() {
-		LowerSparkMax.setInverted(true);
-		UpperSparkMax.setInverted(true);
-		LowerSparkMax.set(DeliveryConstants.kDeliveryHalfSpeed);
-		UpperSparkMax.set(DeliveryConstants.kDeliveryHalfSpeed);
+		LowerSparkMax.set(0.2);
+		UpperSparkMax.set(0.2);
 	}
 
 	// public void disablePiston() {

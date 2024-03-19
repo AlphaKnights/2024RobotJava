@@ -6,8 +6,13 @@ package frc.robot;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+//import frc.robot.commands.Drive.NavXZeroCommand;
 import frc.robot.Constants.PortConstants;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,14 +29,13 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.*;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
@@ -50,26 +54,27 @@ public class RobotContainer {
 	private final DeliverySubsystem m_deliverySubsystem = new DeliverySubsystem();
 	private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
 	// private final LedSubsystem m_ledSubsystem = new LedSubsystem();
-
+	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	private IntakeCommands m_IntakeCommands;
 
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	//private final AutoLevel m_autoLevel = new AutoLevel(m_robotDrive);
   	//private final AutoZeroCommand m_AutoZeroCommand = new AutoZeroCommand(m_robotDrive);
-	private final CommandXboxController m_driverController =
-		new CommandXboxController(OIConstants.kDriverControllerPort);
-
+	private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+	
 	private final Joystick m_genController = new Joystick(OIConstants.kGenControllerPort);
+	//private final Joystick m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
 	private final JoystickButton m_extendButton = new JoystickButton(m_genController, OIConstants.kClimbExtendButton);
 	private final JoystickButton m_retractButton = new JoystickButton(m_genController, OIConstants.kClimbRetractButton);
 	private final JoystickButton m_intakeOnButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeButton);
 	private final JoystickButton m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
 	private final JoystickButton m_intakeOutButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
-
 	private final JoystickButton m_slowShotButton = new JoystickButton(m_genController, OIConstants.kFireSlowButton);
 	private final JoystickButton m_fireShotButton = new JoystickButton(m_genController, OIConstants.kFireButton);
-
+	//private final AnalogInput m_ultrasonic = new AnalogInput(PortConstants.kIntakeUltrasonicPort);
+	private int switchCounter = 0;
+	private boolean lastTickInput = false;
 	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
@@ -85,7 +90,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                false, true),
+                true, true),
             m_robotDrive));	
 	}
 
@@ -102,6 +107,7 @@ public class RobotContainer {
 
 
 	private void configureBindings() {
+		
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		// new Trigger(m_exampleSubsystem::exampleCondition)
 		//     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -111,13 +117,13 @@ public class RobotContainer {
 		// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
 
-		InstantCommand fullDelivery = new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem);
-		InstantCommand halfDelivery = new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem);
-		InstantCommand stopDelivery = new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem);
+		//InstantCommand fullDelivery = new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem);
+		//InstantCommand halfDelivery = new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem);
+		//InstantCommand stopDelivery = new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem);
 
-		InstantCommand intakeOn = new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
+		//InstantCommand intakeOn = new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
 		InstantCommand intakeOut = new InstantCommand(()-> m_intakeSybsystem.intakeReverse(), m_intakeSybsystem);
-		InstantCommand intakeOff = new InstantCommand(()-> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
+		//InstantCommand intakeOff = new InstantCommand(()-> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
 
 		InstantCommand extendClimb = new InstantCommand(()-> m_climbSubsystem.extend(), m_climbSubsystem);
 		InstantCommand retractClimb = new InstantCommand(()-> m_climbSubsystem.retract(), m_climbSubsystem);
@@ -132,16 +138,26 @@ public class RobotContainer {
 		// SequentialCommandGroup towerIntake = new SequentialCommandGroup(Commands.runOnce(m_deliverySubsystem::towerIntake, m_deliverySubsystem), new WaitCommand(1.5), stopDelivery);
 
 		// Review might have issues
+		SequentialCommandGroup playerIntake = new SequentialCommandGroup(
+			new InstantCommand(()-> m_deliverySubsystem.towerIntake(), m_deliverySubsystem),
+			new InstantCommand(()-> m_intakeSybsystem.intakeReverse(), m_intakeSybsystem)
+		);
+		SequentialCommandGroup playerIntakeOff = new SequentialCommandGroup(
+			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem)
+		);
 		SequentialCommandGroup fullFire = new SequentialCommandGroup(
 			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
-			new WaitCommand(1.5),
+			new WaitCommand(0.5),
 			new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem),
+			new WaitCommand(1),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
 		SequentialCommandGroup halfFire = new SequentialCommandGroup(
 			new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem), 
 			new WaitCommand(1.5), 
 			new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem), 
+			new WaitCommand(1.5),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
 
@@ -154,16 +170,19 @@ public class RobotContainer {
 		//cus otherwise these might overwrite delivery
 //needs to be tested^
 
+
+
 		// Climb
 		m_extendButton.onTrue(extendClimb).onFalse(haltClimb);
 		m_retractButton.onTrue(retractClimb).onFalse(haltClimb);
 		
 		// Intake
+		m_towerIntakeButton.whileTrue(playerIntake).onFalse(playerIntakeOff);
 		// m_towerIntakeButton.onTrue(towerIntake);
-		m_intakeOnButton.onTrue(m_IntakeCommands.intakeOn());
+		m_intakeOnButton.whileTrue(m_IntakeCommands.intakeOn()).onFalse(m_IntakeCommands.intakeOff());
 		// m_intakeOnButton.onTrue(blueLED); 
 		m_intakeOutButton.onTrue(intakeOut);
-
+		
 		// Firing
 		m_slowShotButton.onTrue(halfFire);
 		m_fireShotButton.onTrue(fullFire);

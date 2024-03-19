@@ -73,7 +73,7 @@ public final class Constants {
 
 	public static final class OIConstants {
 		//PSP Controller
-		public static final int kDriverControllerPort = 0;
+		public static final int kDriverControllerPort = 1;
 		public static final double kDriveDeadband = 0.025;
 		public static final int kNavXZeroButton = 1;
 		public static final int kResetEncodersButton = 2;
@@ -81,7 +81,7 @@ public final class Constants {
 		public static final int kAutoBalanceButton = 4;
 
 		//Intake, Delivery, and Climb Controller
-		public static final int kGenControllerPort = 1;
+		public static final int kGenControllerPort = 0;
 		public static final int kFloorIntakeButton = 3;
 		public static final int kFloorIntakeOutButton = 4;
 		public static final int kClimbExtendButton = 11;
@@ -108,17 +108,17 @@ public final class Constants {
 	public static final class DriveConstants {
 		// Driving Parameters - Note that these are not the maximum capable speeds of
 		// the robot, rather the allowed maximum speeds
-		public static final double kMaxSpeedMetersPerSecond = 5.6;//TODO: Find max Speed
+		public static final double kMaxSpeedMetersPerSecond = 9;//TODO: Find max Speed
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
 		//slew containts to add motion curve
-		public static final double kDirectionSlewRate = 1.2; // radians per second
+		public static final double kDirectionSlewRate = 3; // radians per second
 		public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-		public static final double kRotationalSlewRate = 2.0; 
+		public static final double kRotationalSlewRate = 3.0; 
 		// Chassis configuration
-		public static final double kTrackWidth = Units.inchesToMeters(22.125);
+		public static final double kTrackWidth = Units.inchesToMeters(28);
 		// Distance between centers of right and left wheels on robot
-		public static final double kWheelBase = Units.inchesToMeters(32);
+		public static final double kWheelBase = Units.inchesToMeters(28);
 		// Distance between front and back wheels on robot
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 			new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -159,7 +159,7 @@ public final class Constants {
 		public static final int kSparkMaxUIntakePort = 31;
 		public static final int kSparkMaxLIntakePort = 32;
 
-		// public static final int kIntakeLimitSwitchPort = 2;
+		public static final int kIntakeUltrasonicPort = 2;
 
 		// public static final int kClimbUpperLimitSwitchPort = 0;
 		// public static final int kClimbLowerLimitSwitchPort = 1;
@@ -244,11 +244,12 @@ public final class Constants {
 	public static final class IntakeConstants {
 		public static final double kIntakeOnSpeed = 0.5;
 		public static final double kIntakeOffSpeed = 0;
+		public static final double kUltrasonicDetectDist = 7.0;
 	}
 
 	public static final class DeliveryConstants {
-		public static final double kDeliveryFullSpeed = 1.0;
-		public static final double kDeliveryHalfSpeed = 0.5;
+		public static final double kDeliveryFullSpeed = 0.5;
+		public static final double kDeliveryHalfSpeed = 0.31;
 		public static final double kDeliveryOffSpeed = 0;
 	}
 
