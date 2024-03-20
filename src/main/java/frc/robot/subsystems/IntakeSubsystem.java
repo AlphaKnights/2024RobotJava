@@ -66,6 +66,8 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	public void intakeReverse() {
+		m_sparkMax.setInverted(true);
+		m_sparkMaxU.setInverted(true);
 		m_sparkMax.set(-0.2);
 		m_sparkMaxU.set(-0.2);
 	}

@@ -112,9 +112,9 @@ public final class Constants {
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
 		//slew containts to add motion curve
-		public static final double kDirectionSlewRate = 3; // radians per second
+		public static final double kDirectionSlewRate = 1.2; // radians per second
 		public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-		public static final double kRotationalSlewRate = 3.0; 
+		public static final double kRotationalSlewRate = 2.0; 
 		// Chassis configuration
 		public static final double kTrackWidth = Units.inchesToMeters(28);
 		// Distance between centers of right and left wheels on robot
@@ -128,10 +128,10 @@ public final class Constants {
 			);
 
 		// Angular offsets of the modules relative to the chassis in degrees 
-		public static final double kFrontLeftChassisAngularOffset = -Math.PI/2;
-		public static final double kFrontRightChassisAngularOffset = 0;
-		public static final double kBackLeftChassisAngularOffset = Math.PI;
-		public static final double kBackRightChassisAngularOffset = Math.PI/2;
+		public static final double kFrontLeftChassisAngularOffset = -45*(Math.PI/180);
+		public static final double kFrontRightChassisAngularOffset = 60*(Math.PI/180);
+		public static final double kBackLeftChassisAngularOffset = 63*(Math.PI/180);
+		public static final double kBackRightChassisAngularOffset = 140*(Math.PI/90);
 
 		// SPARK MAX CAN IDs
 		// GROUPINGS - Drive = 00 Turn = 10 Delivery = 20 Intake = 30 Climb = 40
@@ -249,14 +249,19 @@ public final class Constants {
 	}
 
 	public static final class DeliveryConstants {
-		public static final double kDeliveryFullSpeed = 0.57;
+		public static final double kDeliveryFullSpeed = 0.6;
 		public static final double kDeliveryHalfSpeed = 0.31;
 		public static final double kDeliveryOffSpeed = 0;
 	}
 
 	public static final class ClimbConstants {
 		public static final double kClimbExtendSpeed = 0.5;
+		
 		public static final double kClimbRetractsSpeed = 0.5;
+
+		public static final double kGearRatioLeft = 64;
+		public static final double kGearRatioRight = 20;
+		public static final double kGearRatioMax = 64;
 	}
 
 	public static final class PneumaticsConstants {

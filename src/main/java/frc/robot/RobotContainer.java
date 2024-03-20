@@ -61,8 +61,8 @@ public class RobotContainer {
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	//private final AutoLevel m_autoLevel = new AutoLevel(m_robotDrive);
   	//private final AutoZeroCommand m_AutoZeroCommand = new AutoZeroCommand(m_robotDrive);
-	private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-	
+	//private final XboxController m_driverController = new XboxController();
+	private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 	private final Joystick m_genController = new Joystick(OIConstants.kGenControllerPort);
 	//private final Joystick m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
 	private final JoystickButton m_extendButton = new JoystickButton(m_genController, OIConstants.kClimbExtendButton);
@@ -87,12 +87,12 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));	
-	}
+                false, true),
+            m_robotDrive));
+  }
 
 	/**
 	 * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -148,9 +148,9 @@ public class RobotContainer {
 		);
 		SequentialCommandGroup fullFire = new SequentialCommandGroup(
 			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
-			new WaitCommand(0.5),
+			new WaitCommand(0.4),
 			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem),
-			new WaitCommand(1),
+			new WaitCommand(0.5),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
 		SequentialCommandGroup halfFire = new SequentialCommandGroup(
