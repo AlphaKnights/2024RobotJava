@@ -149,14 +149,14 @@ public class RobotContainer {
 		SequentialCommandGroup fullFire = new SequentialCommandGroup(
 			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
 			new WaitCommand(0.5),
-			new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem),
+			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem),
 			new WaitCommand(1),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
 		SequentialCommandGroup halfFire = new SequentialCommandGroup(
 			new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem), 
 			new WaitCommand(1.5), 
-			new InstantCommand(() -> m_intakeSybsystem.intakeOn(), m_intakeSybsystem), 
+			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem), 
 			new WaitCommand(1.5),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));

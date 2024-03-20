@@ -160,6 +160,7 @@ public final class Constants {
 		public static final int kSparkMaxLIntakePort = 32;
 
 		public static final int kIntakeUltrasonicPort = 2;
+		public static final int kIntakeUltrasonicEchoPort = 3;
 
 		// public static final int kClimbUpperLimitSwitchPort = 0;
 		// public static final int kClimbLowerLimitSwitchPort = 1;
@@ -248,7 +249,7 @@ public final class Constants {
 	}
 
 	public static final class DeliveryConstants {
-		public static final double kDeliveryFullSpeed = 0.5;
+		public static final double kDeliveryFullSpeed = 0.57;
 		public static final double kDeliveryHalfSpeed = 0.31;
 		public static final double kDeliveryOffSpeed = 0;
 	}
