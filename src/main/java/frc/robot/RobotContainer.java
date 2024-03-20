@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 import java.util.List;
 
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -77,7 +78,7 @@ public class RobotContainer {
 	private boolean lastTickInput = false;
 	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
-	public RobotContainer() {
+	public RobotContainer(UsbCamera frontCamera, UsbCamera rearCamera) {
 
 		m_IntakeCommands = new IntakeCommands(m_intakeSybsystem);
 		// Configure the trigger bindings
