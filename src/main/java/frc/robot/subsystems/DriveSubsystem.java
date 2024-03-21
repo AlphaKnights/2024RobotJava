@@ -190,7 +190,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 * @param rateLimit     Whether to enable rate limiting for smoother control.
 	 */
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
-		if (!m_isInXForm) {
+		// if (!m_isInXForm) {
 		double xSpeedCommanded;
 		double ySpeedCommanded;
 
@@ -251,7 +251,7 @@ public class DriveSubsystem extends SubsystemBase {
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 			fieldRelative
 				? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-					Rotation2d.fromDegrees(-m_gyro.getAngle()+135))
+					Rotation2d.fromDegrees(-m_gyro.getAngle()))
 				: new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 		SwerveDriveKinematics.desaturateWheelSpeeds(
 			swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -260,7 +260,7 @@ public class DriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
 		}
-	}
+	// }
 
 	/**
 	 * Sets the wheels into an X formation to prevent movement.

@@ -128,10 +128,10 @@ public final class Constants {
 			);
 
 		// Angular offsets of the modules relative to the chassis in degrees 
-		public static final double kFrontLeftChassisAngularOffset = -60*(Math.PI/180);
-		public static final double kFrontRightChassisAngularOffset = (43-180)*(Math.PI/180);
-		public static final double kBackLeftChassisAngularOffset = 45*(Math.PI/180);
-		public static final double kBackRightChassisAngularOffset = 270*(Math.PI/180);
+		public static final double kFrontLeftChassisAngularOffset = (-60 - 45)*(Math.PI/180);
+		public static final double kFrontRightChassisAngularOffset = (43-180 - 45)*(Math.PI/180);
+		public static final double kBackLeftChassisAngularOffset = (45 - 45)*(Math.PI/180);
+		public static final double kBackRightChassisAngularOffset = (270 - 45)*(Math.PI/180);
 
 		// SPARK MAX CAN IDs
 		// GROUPINGS - Drive = 00 Turn = 10 Delivery = 20 Intake = 30 Climb = 40
