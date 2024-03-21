@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -37,9 +39,12 @@ public class Robot extends TimedRobot {
 		UsbCamera frontCamera = CameraServer.startAutomaticCapture(1);
 		UsbCamera rearCamera = CameraServer.startAutomaticCapture(0);
 
-		NetworkTableEntry cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+		VideoSink server = CameraServer.getServer();
 
-		CameraSubsystem.init(frontCamera, rearCamera, cameraSelection);
+		frontCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+		rearCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+
+		CameraSubsystem.init(frontCamera, rearCamera, server);
 
 		m_robotContainer = new RobotContainer(frontCamera, rearCamera);
 	}

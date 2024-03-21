@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.cscore.VideoSink;
 
 enum Direction {
     FRONT,
@@ -12,20 +12,20 @@ public class CameraSubsystem {
     private static UsbCamera frontCamera;
     private static UsbCamera rearCamera;
 
-    private static NetworkTableEntry cameraSelection;
+    private static VideoSink server;
 
-    public static void init(UsbCamera fCamera, UsbCamera rCamera, NetworkTableEntry table){
+    public static void init(UsbCamera fCamera, UsbCamera rCamera, VideoSink table){
         frontCamera = fCamera;
         rearCamera = rCamera;
 
-        cameraSelection = table;
+        server = table;
     }
 
     public static void select(Direction direction){
         if (direction == Direction.FRONT) {
-            cameraSelection.setString(frontCamera.getName());
+            server.setSource(frontCamera);
             return;
         }
-        cameraSelection.setString(rearCamera.getName());
+        server.setSource(rearCamera);
     }
 }
