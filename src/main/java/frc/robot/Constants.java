@@ -108,7 +108,7 @@ public final class Constants {
 	public static final class DriveConstants {
 		// Driving Parameters - Note that these are not the maximum capable speeds of
 		// the robot, rather the allowed maximum speeds
-		public static final double kMaxSpeedMetersPerSecond = 9;//TODO: Find max Speed
+		public static final double kMaxSpeedMetersPerSecond = 8;//TODO: Find max Speed
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
 		//slew containts to add motion curve
@@ -128,10 +128,10 @@ public final class Constants {
 			);
 
 		// Angular offsets of the modules relative to the chassis in degrees 
-		public static final double kFrontLeftChassisAngularOffset = -45*(Math.PI/180);
-		public static final double kFrontRightChassisAngularOffset = 60*(Math.PI/180);
-		public static final double kBackLeftChassisAngularOffset = 63*(Math.PI/180);
-		public static final double kBackRightChassisAngularOffset = 140*(Math.PI/90);
+		public static final double kFrontLeftChassisAngularOffset = -60*(Math.PI/180);
+		public static final double kFrontRightChassisAngularOffset = (43-180)*(Math.PI/180);
+		public static final double kBackLeftChassisAngularOffset = 45*(Math.PI/180);
+		public static final double kBackRightChassisAngularOffset = 270*(Math.PI/180);
 
 		// SPARK MAX CAN IDs
 		// GROUPINGS - Drive = 00 Turn = 10 Delivery = 20 Intake = 30 Climb = 40
@@ -224,8 +224,8 @@ public final class Constants {
 	public static final class AutoConstants {
 		public static final int kAutoMode = 0;
 
-		public static final double kMaxSpeedMetersPerSecond = 1;
-		public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+		public static final double kMaxSpeedMetersPerSecond = 0.3;
+		public static final double kMaxAccelerationMetersPerSecondSquared = 0.3;
 		public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
 		public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 

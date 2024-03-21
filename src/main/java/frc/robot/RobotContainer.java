@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 import java.util.List;
 
+import org.w3c.dom.stylesheets.MediaList;
+
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -89,9 +91,9 @@ public class RobotContainer {
         new RunCommand(
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                false, true),
+                MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OIConstants.kDriveDeadband),
+                true, true),
             m_robotDrive));
   }
 
@@ -210,38 +212,59 @@ public class RobotContainer {
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
+		// An example trajectory to follow. All units in meters.
+		Trajectory leaveTrajectory = TrajectoryGenerator.generateTrajectory(
+			// Start at the origin facing the +X direction
+			new Pose2d(0, 0, new Rotation2d(0)),
+			//no other points to pass through
+			List.of(),
+			// End posiition to reach, 4.5 meters forward
+			new Pose2d(4.5, 0, new Rotation2d(0)),
+				config);
+			var thetaController = new ProfiledPIDController(
+			AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+			thetaController.enableContinuousInput(-Math.PI, Math.PI);
+		
+		SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+			leaveTrajectory,
+			m_robotDrive::getPose, // Functional interface to feed supplier
+			DriveConstants.kDriveKinematics,
+			
+			// Position controllers
+			new PIDController(AutoConstants.kPXController, 0, 0),
+			new PIDController(AutoConstants.kPYController, 0, 0),
+				thetaController,
+				m_robotDrive::setModuleStates,
+				m_robotDrive);
+			
+			// Reset odometry to the starting pose of the trajectory.
+			m_robotDrive.resetOdometry(leaveTrajectory.getInitialPose());
+			//moves along given trajectory (forward 4.5 meters)
+
+		SequentialCommandGroup autosFullFire = new SequentialCommandGroup(
+			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
+			new WaitCommand(0.4),
+			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem),
+			new WaitCommand(0.5),
+			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
+
+		SequentialCommandGroup autosHalfFire = new SequentialCommandGroup(
+			new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem), 
+			new WaitCommand(1.5), 
+			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem), 
+			new WaitCommand(1.5),
+			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
+
 		switch (AutoConstants.kAutoMode) {
 			default :
 			case 0 : //Auto Command to leave
-				// An example trajectory to follow. All units in meters.
-				Trajectory leaveTrajectory = TrajectoryGenerator.generateTrajectory(
-					// Start at the origin facing the +X direction
-					new Pose2d(0, 0, new Rotation2d(0)),
-					//no other points to pass through
-					List.of(),
-					// End posiition to reach, 4.5 meters forward
-					new Pose2d(4.5, 0, new Rotation2d(0)),
-					config);
-				var thetaController = new ProfiledPIDController(
-				AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-				thetaController.enableContinuousInput(-Math.PI, Math.PI);
-			
-				SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-					leaveTrajectory,
-					m_robotDrive::getPose, // Functional interface to feed supplier
-					DriveConstants.kDriveKinematics,
-			
-					// Position controllers
-					new PIDController(AutoConstants.kPXController, 0, 0),
-					new PIDController(AutoConstants.kPYController, 0, 0),
-					thetaController,
-					m_robotDrive::setModuleStates,
-					m_robotDrive);
-			
-				// Reset odometry to the starting pose of the trajectory.
-				m_robotDrive.resetOdometry(leaveTrajectory.getInitialPose());
-				//moves along given trajectory (forward 4.5 meters)
 				return swerveControllerCommand;
+			case 1: 
+				return new SequentialCommandGroup(autosFullFire, swerveControllerCommand) ;
+			case 2:
+				return new SequentialCommandGroup(autosHalfFire, swerveControllerCommand);
 		}
 	}
 	}
