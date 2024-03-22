@@ -268,6 +268,10 @@ public class DriveSubsystem extends SubsystemBase {
 		m_frontRight.setDesiredState(swerveModuleStates[1]);
 		m_rearLeft.setDesiredState(swerveModuleStates[2]);
 		m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+        // Set camera dircetion to where the robot is moving
+        Direction direction = ySpeedDelivered == 0.0 ? Direction.FRONT : Direction.REAR;
+        CameraSubsystem.select(direction);
 		}
 	// }
 
