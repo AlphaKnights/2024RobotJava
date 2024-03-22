@@ -48,28 +48,47 @@ public class ClimbSubsystem extends SubsystemBase {
 		// This method will be called once per scheduler run during simulation
 	}
 
-    public void extend() {
+    public void extendLeft() {
 		// if (!m_upperLimitSwitch.get()) {
-        	m_rightTalon.setInverted(false);
+        	// m_rightTalon.setInverted(false);
         	m_leftTalon.setInverted(false);
 
-        	m_rightTalon.set(ClimbConstants.kClimbExtendSpeed);
+        	// m_rightTalon.set(ClimbConstants.kClimbExtendSpeed);
         	m_leftTalon.set(ClimbConstants.kClimbExtendSpeed);
 		// }
     }
 
-    public void retract() {
-		// if (!m_lowerLimitSwitch.get()) {
-        	m_rightTalon.setInverted(true);
-        	m_leftTalon.setInverted(true);
+	public void extendRight() {
+		// if (!m_upperLimitSwitch.get()) {
+        	m_rightTalon.setInverted(false);
+        	// m_leftTalon.setInverted(false);
 
-        	m_rightTalon.set(ClimbConstants.kClimbRetractsSpeed);
-        	m_leftTalon.set(ClimbConstants.kClimbRetractsSpeed);
+        	m_rightTalon.set(ClimbConstants.kClimbExtendSpeed);
+        	// m_leftTalon.set(ClimbConstants.kClimbExtendSpeed);
 		// }
     }
 
-    public void stop() {
-        m_rightTalon.stopMotor();
+    public void retractLeft() {
+		// if (!m_lowerLimitSwitch.get()) {
+        	// m_rightTalon.set(ClimbConstants.kClimbRetractsSpeed);
+        	m_leftTalon.set(-ClimbConstants.kClimbRetractsSpeed);
+		// }
+    }
+
+	public void retractRight() {
+		// if (!m_lowerLimitSwitch.get()) {
+        	m_rightTalon.set(-ClimbConstants.kClimbRetractsSpeed);
+        	// m_leftTalon.set(ClimbConstants.kClimbRetractsSpeed);
+		// }
+    }
+
+    public void stopLeft() {
+        // m_rightTalon.stopMotor();
         m_leftTalon.stopMotor();
+    }
+
+	public void stopRight() {
+        m_rightTalon.stopMotor();
+        // m_leftTalon.stopMotor();
     }
 }

@@ -106,6 +106,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_rotSpeedEntry.setDefaultDouble(0.0);
         m_gyroHeadingEntry.setDefaultDouble(0.0);
         SmartDashboard.putData(m_field2d);
+
+        
     }
 
     int i = 0;
@@ -179,6 +181,9 @@ public class DriveSubsystem extends SubsystemBase {
         m_field2d.getObject("Actual Pos").setPose(m_odometry.getPoseMeters());
         m_field2d.setRobotPose(m_poseEstimator.getEstimatedPosition());
     }
+  public void addVisionMeasurement(Pose2d pose, double timestamp){
+    m_poseEstimator.addVisionMeasurement(pose, timestamp);
+  }
 
 	/**
 	 * Method to drive the robot using joystick info.

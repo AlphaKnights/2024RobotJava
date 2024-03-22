@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
+import javax.swing.text.html.Option;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -97,23 +99,29 @@ public class VisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Query the latest result from PhotonVision
-    var result = camera.getLatestResult(); // returns a PhotoPipeLine Container
 
-    // Check if the latest result has any targets.
-    boolean hasTargets = result.hasTargets();
+    //Optional<EstimatedRobotPose> estimatorUpdate = photonPoseEstimator.update();
+    //if (estimatorUpdate.isPresent()){
 
-    SmartDashboard.putBoolean("Has target", hasTargets);
+    //}
 
-    if (hasTargets) {
+    // var result = camera.getLatestResult(); // returns a PhotoPipeLine Container
 
-      if (result.getMultiTagResult().estimatedPose.isPresent) {
-        Transform3d fieldToCamera = result.getMultiTagResult().estimatedPose.best;
-        //Logger.recordOutput("fieldToCamera", fieldToCamera);
+    // // Check if the latest result has any targets.
+    // boolean hasTargets = result.hasTargets();
 
-      }
+    // SmartDashboard.putBoolean("Has target", hasTargets);
 
-      SmartDashboard.putNumber("tag ID", result.getBestTarget().getFiducialId());
-      SmartDashboard.putNumber("pose ambiguity", result.getBestTarget().getPoseAmbiguity());
+    // if (hasTargets) {
+
+    //   if (result.getMultiTagResult().estimatedPose.isPresent) {
+    //     Transform3d fieldToCamera = result.getMultiTagResult().estimatedPose.best;
+    //     //Logger.recordOutput("fieldToCamera", fieldToCamera);
+
+    //   }
+
+    //   SmartDashboard.putNumber("tag ID", result.getBestTarget().getFiducialId());
+    //   SmartDashboard.putNumber("pose ambiguity", result.getBestTarget().getPoseAmbiguity());
 
       // Transform3d bestCameraToTarget =
       // result.getBestTarget().getBestCameraToTarget();
@@ -132,7 +140,7 @@ public class VisionSubsystem extends SubsystemBase {
       // SmartDashboard.putNumber("z inches",
       // Units.metersToInches(bestCameraToTarget.getZ()));
 
-    }
+    // }
 
   }
 }

@@ -41,6 +41,7 @@ public final class Constants {
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -73,24 +74,29 @@ public final class Constants {
 
 	public static final class OIConstants {
 		//PSP Controller
+		public static final int kNavXZeroButton = 1;
 		public static final int kDriverControllerPort = 1;
 		public static final double kDriveDeadband = 0.025;
-		public static final int kNavXZeroButton = 1;
+		//public static final int kNavXZeroButton = 1;
 		public static final int kResetEncodersButton = 2;
 		public static final int kHoldPositionButton = 3;
-		public static final int kAutoBalanceButton = 4;
+		//public static final int kAutoBalanceButton = 4;
 
 		//Intake, Delivery, and Climb Controller
 		public static final int kGenControllerPort = 0;
 		public static final int kFloorIntakeButton = 3;
 		public static final int kFloorIntakeOutButton = 4;
-		public static final int kClimbExtendButton = 11;
-		public static final int kClimbRetractButton = 12;
+		public static final int kClimbExtendLeftButton = 9;
+		public static final int kClimbRetractLeftButton = 11;
+		public static final int kClimbExtendRightButton = 10;
+		public static final int kClimbRetractRightButton = 12;
 		public static final int kClimbLockButton = 10;
 		public static final int kFireSlowButton = 5;
 		public static final int kTowerIntakeButton = 6;
 		public static final int kFireButton = 1; // Trigger Button
 		// public static final int kFlyWheelSpinUp = 2; // Thumb Button
+
+		public static final double kDelSpeedChange = 0.7;
 
 		
 
@@ -99,7 +105,7 @@ public final class Constants {
 	}
 
 	public static final class VisionConstants {
-		public static final Transform3d robotToCam = new Transform3d();
+		public static final Transform3d robotToCam = new Transform3d(1,0,0.5, new Rotation3d());
 
 		public static final String kCameraName = "camera";
 		public static final Transform3d kCameraOffset = new Transform3d();
@@ -108,7 +114,7 @@ public final class Constants {
 	public static final class DriveConstants {
 		// Driving Parameters - Note that these are not the maximum capable speeds of
 		// the robot, rather the allowed maximum speeds
-		public static final double kMaxSpeedMetersPerSecond = 8;//TODO: Find max Speed
+		public static final double kMaxSpeedMetersPerSecond = 6.5;//TODO: Find max Speed
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
 		//slew containts to add motion curve
@@ -217,7 +223,7 @@ public final class Constants {
 		public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
 		public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-		public static final int kDrivingMotorCurrentLimit = 50; // amps
+		public static final int kDrivingMotorCurrentLimit = 40; // amps
 		public static final int kTurningMotorCurrentLimit = 20; // amps
 	}
 

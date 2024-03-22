@@ -13,6 +13,7 @@ import frc.robot.Constants.PortConstants;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -39,7 +40,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.AnalogInput;
-
+//import frc.robot.commands.Drive.NavXZeroCommand;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
@@ -59,29 +60,33 @@ public class RobotContainer {
 	// private final LedSubsystem m_ledSubsystem = new LedSubsystem();
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	private IntakeCommands m_IntakeCommands;
-
+	InstantCommand m_zeroCommand = new InstantCommand(()->m_robotDrive.zeroHeading());
 	// Replace with CommandPS4Controller or CommandJoystick if needed
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	//private final AutoLevel m_autoLevel = new AutoLevel(m_robotDrive);
   	//private final AutoZeroCommand m_AutoZeroCommand = new AutoZeroCommand(m_robotDrive);
 	//private final XboxController m_driverController = new XboxController();
-	private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+	JoystickButton m_zeroButton = new JoystickButton(m_driverController, 1);
 	private final Joystick m_genController = new Joystick(OIConstants.kGenControllerPort);
 	//private final Joystick m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
-	private final JoystickButton m_extendButton = new JoystickButton(m_genController, OIConstants.kClimbExtendButton);
-	private final JoystickButton m_retractButton = new JoystickButton(m_genController, OIConstants.kClimbRetractButton);
+	private final JoystickButton m_extendLeftButton = new JoystickButton(m_genController, OIConstants.kClimbExtendLeftButton);
+	private final JoystickButton m_retractLeftButton = new JoystickButton(m_genController, OIConstants.kClimbRetractLeftButton);
+	private final JoystickButton m_extendRightButton = new JoystickButton(m_genController, OIConstants.kClimbExtendRightButton);
+	private final JoystickButton m_retractRightButton = new JoystickButton(m_genController, OIConstants.kClimbRetractRightButton);
 	private final JoystickButton m_intakeOnButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeButton);
 	private final JoystickButton m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
-	private final JoystickButton m_intakeOutButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
+	//private final JoystickButton m_intakeOutButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
 	private final JoystickButton m_slowShotButton = new JoystickButton(m_genController, OIConstants.kFireSlowButton);
 	private final JoystickButton m_fireShotButton = new JoystickButton(m_genController, OIConstants.kFireButton);
+	private final JoystickButton m_reverseIntakeButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
 	//private final AnalogInput m_ultrasonic = new AnalogInput(PortConstants.kIntakeUltrasonicPort);
 	private int switchCounter = 0;
 	private boolean lastTickInput = false;
 	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer(UsbCamera frontCamera, UsbCamera rearCamera) {
-
+		
 		m_IntakeCommands = new IntakeCommands(m_intakeSybsystem);
 		// Configure the trigger bindings
 		configureBindings();
@@ -93,7 +98,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
                 MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OIConstants.kDriveDeadband),
-                false, true),
+                true, true),
             m_robotDrive));
   }
 
@@ -128,9 +133,14 @@ public class RobotContainer {
 		InstantCommand intakeOut = new InstantCommand(()-> m_intakeSybsystem.intakeReverse(), m_intakeSybsystem);
 		//InstantCommand intakeOff = new InstantCommand(()-> m_intakeSybsystem.intakeOn(), m_intakeSybsystem);
 
-		InstantCommand extendClimb = new InstantCommand(()-> m_climbSubsystem.extend(), m_climbSubsystem);
-		InstantCommand retractClimb = new InstantCommand(()-> m_climbSubsystem.retract(), m_climbSubsystem);
-		InstantCommand haltClimb = new InstantCommand(()-> m_climbSubsystem.stop(), m_climbSubsystem);
+		InstantCommand extendLeftClimb = new InstantCommand(()-> m_climbSubsystem.extendLeft(), m_climbSubsystem);
+		InstantCommand extendRightClimb = new InstantCommand(()-> m_climbSubsystem.extendRight(), m_climbSubsystem);
+
+		InstantCommand retractLeftClimb = new InstantCommand(()-> m_climbSubsystem.retractLeft(), m_climbSubsystem);
+		InstantCommand retractRightClimb = new InstantCommand(()-> m_climbSubsystem.retractRight(), m_climbSubsystem);
+
+		InstantCommand haltClimbLeft = new InstantCommand(()-> m_climbSubsystem.stopLeft(), m_climbSubsystem);
+		InstantCommand haltClimbRight = new InstantCommand(()-> m_climbSubsystem.stopRight(), m_climbSubsystem);
 
 		// Command blueLED = Commands.runOnce(m_ledSubsystem::blue, m_ledSubsystem);
 		// Command redLED = Commands.runOnce(m_ledSubsystem::red, m_ledSubsystem);
@@ -150,17 +160,18 @@ public class RobotContainer {
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem)
 		);
 		SequentialCommandGroup fullFire = new SequentialCommandGroup(
-			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(m_genController), m_deliverySubsystem),
 			new WaitCommand(0.4),
 			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem),
 			new WaitCommand(0.5),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
+			
 		SequentialCommandGroup halfFire = new SequentialCommandGroup(
 			new InstantCommand(()-> m_deliverySubsystem.halfDelivery(), m_deliverySubsystem), 
-			new WaitCommand(1.5), 
+			new WaitCommand(0.4), 
 			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem), 
-			new WaitCommand(1.5),
+			new WaitCommand(0.5),
 			new InstantCommand(()-> m_deliverySubsystem.stopDelivery(), m_deliverySubsystem),
 			new InstantCommand(()-> m_intakeSybsystem.intakeOff(), m_intakeSybsystem));
 
@@ -176,16 +187,19 @@ public class RobotContainer {
 
 
 		// Climb
-		m_extendButton.onTrue(extendClimb).onFalse(haltClimb);
-		m_retractButton.onTrue(retractClimb).onFalse(haltClimb);
+		m_extendLeftButton.onTrue(extendLeftClimb).onFalse(haltClimbLeft);
+		m_retractLeftButton.onTrue(retractLeftClimb).onFalse(haltClimbLeft);
+		m_extendRightButton.onTrue(extendRightClimb).onFalse(haltClimbRight);
+		m_retractRightButton.onTrue(retractRightClimb).onFalse(haltClimbRight);
 		
 		// Intake
 		m_towerIntakeButton.whileTrue(playerIntake).onFalse(playerIntakeOff);
 		// m_towerIntakeButton.onTrue(towerIntake);
 		m_intakeOnButton.whileTrue(m_IntakeCommands.intakeOn()).onFalse(m_IntakeCommands.intakeOff());
 		// m_intakeOnButton.onTrue(blueLED); 
-		m_intakeOutButton.onTrue(intakeOut);
-		
+		//m_intakeOutButton.onTrue(intakeOut);
+		m_zeroButton.onFalse(m_zeroCommand);
+		m_reverseIntakeButton.whileTrue(intakeOut).onFalse(m_IntakeCommands.intakeOff());
 		// Firing
 		m_slowShotButton.onTrue(halfFire);
 		m_fireShotButton.onTrue(fullFire);
@@ -242,7 +256,7 @@ public class RobotContainer {
 			//moves along given trajectory (forward 4.5 meters)
 
 		SequentialCommandGroup autosFullFire = new SequentialCommandGroup(
-			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(), m_deliverySubsystem),
+			new InstantCommand(()-> m_deliverySubsystem.fullDelivery(m_genController), m_deliverySubsystem),
 			new WaitCommand(0.4),
 			new InstantCommand(() -> m_intakeSybsystem.intakeOut(), m_intakeSybsystem),
 			new WaitCommand(0.5),
