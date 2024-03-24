@@ -165,5 +165,7 @@ public class MAXSwerveModule {
   /** Changes the chassis offeset */
   public void setChassisOffset(double p_chassisAngularOffset) {
     m_chassisAngularOffset = p_chassisAngularOffset;
+    m_drivingSparkMax.burnFlash();
+    m_turningSparkMax.burnFlash();
   }
 }

@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
+import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class IntakeCommands {
 
@@ -12,9 +13,9 @@ public class IntakeCommands {
         this.intakeSubsystem = intakeSubsystem;
     }
 
-    public InstantCommand intakeOn()
+    public InstantCommand intakeOn(Ultrasonic m)
     {
-        return new InstantCommand(() -> intakeSubsystem.intakeOn(), intakeSubsystem);
+        return new InstantCommand(() -> intakeSubsystem.intakeOn(m), intakeSubsystem);
     }
 
     public InstantCommand intakeOff()

@@ -10,7 +10,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.estimation.CameraTargetRelation;
 
 import com.kauailabs.navx.frc.AHRS;
-
+import java.util.function.BooleanSupplier;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,11 +23,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.NetworkTableConstants;
 import frc.utils.MAXSwerveModule;
+import edu.wpi.first.wpilibj.DriverStation;
 // import frc.utils.PhotonCameraWrapper;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -70,6 +73,8 @@ public class DriveSubsystem extends SubsystemBase {
     private NetworkTableEntry m_ySpeedEntry = NetworkTableConstants.kDriveTable.getEntry("ySpeed");
     private NetworkTableEntry m_rotSpeedEntry = NetworkTableConstants.kDriveTable.getEntry("rotSpeed");
     private NetworkTableEntry m_gyroHeadingEntry = NetworkTableConstants.kDriveTable.getEntry("gyroHeading");
+
+    private boolean fieldRelative = true;
 
     private Field2d m_field2d = new Field2d();
     Optional<EstimatedRobotPose> result;
@@ -195,7 +200,7 @@ public class DriveSubsystem extends SubsystemBase {
 	 *                      field.
 	 * @param rateLimit     Whether to enable rate limiting for smoother control.
 	 */
-	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+	public void drive(double xSpeed, double ySpeed, double rot, boolean rateLimit) {
 		// if (!m_isInXForm) {
 		double xSpeedCommanded;
 		double ySpeedCommanded;
@@ -257,10 +262,23 @@ public class DriveSubsystem extends SubsystemBase {
 		m_xSpeedEntry.setDouble(xSpeedDelivered);
 		m_ySpeedEntry.setDouble(ySpeedDelivered);
 		m_rotSpeedEntry.setDouble(rotDelivered);
+    BooleanSupplier all = () -> {
+      var alliance = DriverStation.getAlliance();
+      if(alliance.isPresent()){
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    };
+    //Boolean team = DriverStation.getAlliance() == DriverStation.Alliance.Red;
 		var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
 			fieldRelative
 				? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-					Rotation2d.fromDegrees(-m_gyro.getAngle()))
+					Rotation2d.fromDegrees(-m_gyro.getAngle() + (
+            all.getAsBoolean() 
+              ? + 0//180
+              
+              : + 0
+              ))) //maybe? 
 				: new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 		SwerveDriveKinematics.desaturateWheelSpeeds(
 			swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -382,5 +400,13 @@ public class DriveSubsystem extends SubsystemBase {
     /** Returns the desired translation magnitude of the robot */
     public double getDesiredTranslationMag() {
         return m_currentTranslationMag;
+    }
+
+    public void toggleFieldRelative() {
+        if (fieldRelative) {
+            fieldRelative = false;
+        } else if (!fieldRelative) {
+            fieldRelative = true;
+        }
     }
 }

@@ -41,10 +41,10 @@ public class DeliverySubsystem extends SubsystemBase {
 		System.out.println("full delivery running");
 		if (tempJoystick.getRawAxis(4) > -OIConstants.kDelSpeedChange) { //if you havent flipped the switch up, fires at 0.6
 			LowerSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed);
-			UpperSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed);
+			UpperSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed - 0.1);
 		} else { //if you have flipped the switch up, fires at 0.7 
 			LowerSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed - 0.1);
-			UpperSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed - 0.1);
+			UpperSparkMax.set(-DeliveryConstants.kDeliveryFullSpeed - 0.2);
 		}
 	}
 	public void halfDelivery(){

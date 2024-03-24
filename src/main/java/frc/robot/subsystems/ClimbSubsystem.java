@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 //import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import frc.robot.Constants.ClimbConstants;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PortConstants;
@@ -20,7 +23,9 @@ public class ClimbSubsystem extends SubsystemBase {
 	// private DigitalInput m_upperLimitSwitch = new DigitalInput(PortConstants.kClimbUpperLimitSwitchPort);
 	// private DigitalInput m_lowerLimitSwitch = new DigitalInput(PortConstants.kClimbLowerLimitSwitchPort);
 
-	public ClimbSubsystem() {}
+	public ClimbSubsystem() {
+		
+	}
 
 	/**
 	 * Example command factory method.
@@ -49,6 +54,7 @@ public class ClimbSubsystem extends SubsystemBase {
 	}
 
     public void extendLeft() {
+			m_leftTalon.setNeutralMode(NeutralModeValue.Brake); 
 		// if (!m_upperLimitSwitch.get()) {
         	// m_rightTalon.setInverted(false);
         	m_leftTalon.setInverted(false);
@@ -59,6 +65,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
 	public void extendRight() {
+		m_rightTalon.setNeutralMode(NeutralModeValue.Brake); 
 		// if (!m_upperLimitSwitch.get()) {
         	m_rightTalon.setInverted(false);
         	// m_leftTalon.setInverted(false);
@@ -69,6 +76,8 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void retractLeft() {
+		m_leftTalon.setNeutralMode(NeutralModeValue.Brake); 
+		m_leftTalon.setInverted(false);
 		// if (!m_lowerLimitSwitch.get()) {
         	// m_rightTalon.set(ClimbConstants.kClimbRetractsSpeed);
         	m_leftTalon.set(-ClimbConstants.kClimbRetractsSpeed);
@@ -76,6 +85,8 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
 	public void retractRight() {
+		m_rightTalon.setNeutralMode(NeutralModeValue.Brake); 
+		m_rightTalon.setInverted(false);
 		// if (!m_lowerLimitSwitch.get()) {
         	m_rightTalon.set(-ClimbConstants.kClimbRetractsSpeed);
         	// m_leftTalon.set(ClimbConstants.kClimbRetractsSpeed);

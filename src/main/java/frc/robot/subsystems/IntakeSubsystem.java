@@ -17,10 +17,11 @@ import frc.robot.Constants.PortConstants;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.Constants.IntakeConstants;
 //import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import frc.robot.Constants.OIConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-	 Ultrasonic m_ultrasonic = new Ultrasonic(PortConstants.kIntakeUltrasonicPort, PortConstants.kIntakeUltrasonicEchoPort);
+	 
 	 CANSparkMax m_sparkMax = new CANSparkMax(PortConstants.kSparkMaxLIntakePort, MotorType.kBrushless);
 	 CANSparkMax m_sparkMaxU = new CANSparkMax(PortConstants.kSparkMaxUIntakePort, MotorType.kBrushless);
 	 public int switchCounter = 0;
@@ -43,13 +44,19 @@ public class IntakeSubsystem extends SubsystemBase {
 		// This method will be called once per scheduler run during simulation
 	}
 
-	public void intakeOn(){
-		if(m_ultrasonic.getRangeInches() < IntakeConstants.kUltrasonicDetectDist){
+	public void intakeOn(Ultrasonic m){
+		//if(m.getRangeInches() < IntakeConstants.kUltrasonicDetectDist){
 			m_sparkMax.setInverted(true);
 			m_sparkMax.set(IntakeConstants.kIntakeOnSpeed);
 			m_sparkMaxU.setInverted(true);
 			m_sparkMaxU.set(IntakeConstants.kIntakeOnSpeed);
-		}
+			System.out.println(m.getRangeInches());
+		//}
+		//else{
+			//m_sparkMax.set(0);
+			//m_sparkMaxU.set(0);
+			//System.out.println(m.getRangeInches());
+		//}
 	}
 
 	public void intakeOut(){

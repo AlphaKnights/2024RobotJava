@@ -11,10 +11,12 @@ import frc.robot.Constants.OIConstants;
 //import frc.robot.commands.Drive.NavXZeroCommand;
 import frc.robot.Constants.PortConstants;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -23,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.Joystick;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import org.w3c.dom.stylesheets.MediaList;
 
@@ -52,6 +55,8 @@ import frc.robot.commands.*;
 */
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
+	//m_ultrasonic.setEnabled(true);
+	// m_ultrasonic.setAutomaticMode(true);
 	private final ExampleSubsystem m_ExampleSubsystem = new ExampleSubsystem();
 	private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 	private final IntakeSubsystem m_intakeSybsystem = new IntakeSubsystem();
@@ -61,13 +66,14 @@ public class RobotContainer {
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	private IntakeCommands m_IntakeCommands;
 	InstantCommand m_zeroCommand = new InstantCommand(()->m_robotDrive.zeroHeading());
-	// Replace with CommandPS4Controller or CommandJoystick if needed
+	InstantCommand m_toggleFieldRelative = new InstantCommand(()-> m_robotDrive.toggleFieldRelative(), m_robotDrive);			// Replace with CommandPS4Controller or CommandJoystick if needed
 	//private final NavXZeroCommand m_zeroCommand = new NavXZeroCommand(m_robotDrive);
 	//private final AutoLevel m_autoLevel = new AutoLevel(m_robotDrive);
   	//private final AutoZeroCommand m_AutoZeroCommand = new AutoZeroCommand(m_robotDrive);
 	//private final XboxController m_driverController = new XboxController();
 	private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 	JoystickButton m_zeroButton = new JoystickButton(m_driverController, 1);
+	JoystickButton m_toggleFieldRelativeButton = new JoystickButton(m_driverController, 3);
 	private final Joystick m_genController = new Joystick(OIConstants.kGenControllerPort);
 	//private final Joystick m_towerIntakeButton = new JoystickButton(m_genController, OIConstants.kTowerIntakeButton);
 	private final JoystickButton m_extendLeftButton = new JoystickButton(m_genController, OIConstants.kClimbExtendLeftButton);
@@ -82,24 +88,44 @@ public class RobotContainer {
 	private final JoystickButton m_reverseIntakeButton = new JoystickButton(m_genController, OIConstants.kFloorIntakeOutButton);
 	//private final AnalogInput m_ultrasonic = new AnalogInput(PortConstants.kIntakeUltrasonicPort);
 	private int switchCounter = 0;
-	private boolean lastTickInput = false;
-	
+	private boolean lastTickInput = false;	
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer(UsbCamera frontCamera, UsbCamera rearCamera) {
 		
 		m_IntakeCommands = new IntakeCommands(m_intakeSybsystem);
-		// Configure the trigger bindings
+		BooleanSupplier team = () -> {
+			var alliance = DriverStation.getAlliance();
+			if(alliance.isPresent()){
+			  return alliance.get() == DriverStation.Alliance.Red;
+			}
+			return false;
+		};
+    	// Configure the trigger bindings
 		configureBindings();
-		m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
-                MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
+
+		if (team.getAsBoolean()) {
+			m_robotDrive.setDefaultCommand(
+        	// The left stick controls translation of the robot.
+        	// Turning is controlled by the X axis of the right stick.
+    			new RunCommand(
+            		() -> m_robotDrive.drive(
+                		MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
+            		   	MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
+                		MathUtil.applyDeadband(m_driverController.getRawAxis(2), OIConstants.kDriveDeadband),
+                	 	true),
+            		m_robotDrive));
+		} else {
+			m_robotDrive.setDefaultCommand(
+        	// The left stick controls translation of the robot.
+        	// Turning is controlled by the X axis of the right stick.
+    			new RunCommand(
+            		() -> m_robotDrive.drive(
+                		MathUtil.applyDeadband(m_driverController.getLeftY()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
+            		   	MathUtil.applyDeadband(m_driverController.getLeftX()*OIConstants.kJoystickInput, OIConstants.kDriveDeadband),
+                		MathUtil.applyDeadband(m_driverController.getRawAxis(2), OIConstants.kDriveDeadband),
+                		true),
+            		m_robotDrive));
+		}
   }
 
 	/**
@@ -115,7 +141,9 @@ public class RobotContainer {
 
 
 	private void configureBindings() {
-		
+		Ultrasonic.setAutomaticMode(true);
+		Ultrasonic m_ultrasonic = new Ultrasonic(PortConstants.kIntakeUltrasonicPort, PortConstants.kIntakeUltrasonicEchoPort);
+		m_ultrasonic.setEnabled(true);		
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 		// new Trigger(m_exampleSubsystem::exampleCondition)
 		//     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -195,10 +223,11 @@ public class RobotContainer {
 		// Intake
 		m_towerIntakeButton.whileTrue(playerIntake).onFalse(playerIntakeOff);
 		// m_towerIntakeButton.onTrue(towerIntake);
-		m_intakeOnButton.whileTrue(m_IntakeCommands.intakeOn()).onFalse(m_IntakeCommands.intakeOff());
+		m_intakeOnButton.whileTrue(m_IntakeCommands.intakeOn(m_ultrasonic)).onFalse(m_IntakeCommands.intakeOff());
 		// m_intakeOnButton.onTrue(blueLED); 
 		//m_intakeOutButton.onTrue(intakeOut);
 		m_zeroButton.onFalse(m_zeroCommand);
+		m_toggleFieldRelativeButton.onFalse(m_toggleFieldRelative);
 		m_reverseIntakeButton.whileTrue(intakeOut).onFalse(m_IntakeCommands.intakeOff());
 		// Firing
 		m_slowShotButton.onTrue(halfFire);
@@ -280,5 +309,13 @@ public class RobotContainer {
 			case 2:
 				return new SequentialCommandGroup(autosHalfFire, swerveControllerCommand);
 		}
+	}
+
+	public void haltAll() {
+		m_climbSubsystem.stopLeft();
+		m_climbSubsystem.stopRight();
+		m_intakeSybsystem.intakeOff();
+		m_deliverySubsystem.stopDelivery();
+		m_robotDrive.drive(0, 0, 0, true);
 	}
 	}

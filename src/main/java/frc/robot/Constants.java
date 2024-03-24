@@ -114,7 +114,7 @@ public final class Constants {
 	public static final class DriveConstants {
 		// Driving Parameters - Note that these are not the maximum capable speeds of
 		// the robot, rather the allowed maximum speeds
-		public static final double kMaxSpeedMetersPerSecond = 6.5;//TODO: Find max Speed
+		public static final double kMaxSpeedMetersPerSecond = 9;//TODO: Find max Speed
 		public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
 		//slew containts to add motion curve
@@ -165,8 +165,8 @@ public final class Constants {
 		public static final int kSparkMaxUIntakePort = 31;
 		public static final int kSparkMaxLIntakePort = 32;
 
-		public static final int kIntakeUltrasonicPort = 2;
-		public static final int kIntakeUltrasonicEchoPort = 3;
+		public static final int kIntakeUltrasonicPort = 1;
+		public static final int kIntakeUltrasonicEchoPort = 0;
 
 		// public static final int kClimbUpperLimitSwitchPort = 0;
 		// public static final int kClimbLowerLimitSwitchPort = 1;
@@ -228,7 +228,7 @@ public final class Constants {
 	}
 
 	public static final class AutoConstants {
-		public static final int kAutoMode = 0;
+		public static final int kAutoMode = 1;
 
 		public static final double kMaxSpeedMetersPerSecond = 0.3;
 		public static final double kMaxAccelerationMetersPerSecondSquared = 0.3;
@@ -251,12 +251,12 @@ public final class Constants {
 	public static final class IntakeConstants {
 		public static final double kIntakeOnSpeed = 0.5;
 		public static final double kIntakeOffSpeed = 0;
-		public static final double kUltrasonicDetectDist = 7.0;
+		public static final double kUltrasonicDetectDist = 4.5;
 	}
 
 	public static final class DeliveryConstants {
-		public static final double kDeliveryFullSpeed = 0.6;
-		public static final double kDeliveryHalfSpeed = 0.31;
+		public static final double kDeliveryFullSpeed = 0.65;
+		public static final double kDeliveryHalfSpeed = 0.24;
 		public static final double kDeliveryOffSpeed = 0;
 	}
 
