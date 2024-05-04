@@ -74,7 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
     private NetworkTableEntry m_rotSpeedEntry = NetworkTableConstants.kDriveTable.getEntry("rotSpeed");
     private NetworkTableEntry m_gyroHeadingEntry = NetworkTableConstants.kDriveTable.getEntry("gyroHeading");
 
-    private boolean fieldRelative = true;
+    private boolean fieldRelative = false;
 
     private Field2d m_field2d = new Field2d();
     Optional<EstimatedRobotPose> result;

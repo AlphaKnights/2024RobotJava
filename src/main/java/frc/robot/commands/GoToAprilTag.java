@@ -60,7 +60,7 @@ public class GoToAprilTag extends SequentialCommandGroup {
 
                 addRequirements(vision, swerveBase);
                 addCommands(new DeferredCommand(() -> getCommand(), Set.of(swerveBase, vision)),
-                                new InstantCommand(() -> swerveBase.drive(0.0, 0.0, 0.0, true, false)));
+                                new InstantCommand(() -> swerveBase.drive(0.0, 0.0, 0.0, false)));
         }
 
         public Command getCommand() {
